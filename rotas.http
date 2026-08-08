@@ -1,0 +1,26 @@
+GET http://localhost:8080/all-movies
+
+###
+POST http://localhost:8080/add-movie
+Content-Type: application/json 
+
+{
+    "titulo": "Harry Potter e a Pedra Filosofal",
+    "genero": "Fantasia",
+    "duracao": "152",
+    "classificacao_etaria": "Livre"
+}
+
+###
+DELETE http://localhost:8080/delete-movie/4
+
+###
+PUT http://localhost:8080/update-movie/4
+Content-Type: application/json
+
+{
+    "titulo": "O espetacular Homem-Aranha",
+    "genero": "Ação",
+    "duracao": "125",
+    "classificacao_etaria": "12"
+}
