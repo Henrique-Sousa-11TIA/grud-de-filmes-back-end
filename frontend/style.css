@@ -1,0 +1,14 @@
+.filmes {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    padding: 10px;
+}
+
+.filme {
+    width: 280px;
+    min-height: 220px;
+    border: 1px solid black;
+    padding: 15px;
+    box-sizing: border-box;
+}
