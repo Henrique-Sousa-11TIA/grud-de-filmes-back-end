@@ -5,10 +5,10 @@ POST http://localhost:8080/add-movie
 Content-Type: application/json 
 
 {
-    "titulo": "Harry Potter e a Pedra Filosofal",
-    "genero": "Fantasia",
-    "duracao": "152",
-    "classificacao_etaria": "Livre"
+    "titulo": "O Senhor dos Anéis: A Sociedade do Anel",
+"genero": "Fantasia",
+"duracao": "178",
+"classificacao_etaria": "12"
 }
 
 ###

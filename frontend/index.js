@@ -2,16 +2,13 @@ async function buscarFilmes() {
     const lista = document.querySelector("#listaFilmes");
 
     try {
-        const resposta = await fetch(
-            "http://localhost:8080/all-movies"
-        );
+        const resposta = await fetch("http://localhost:8080/all-movies");
 
         if (!resposta.ok) {
             throw new Error(`Erro HTTP: ${resposta.status}`);
         }
 
         const filmes = await resposta.json();
-
         lista.innerHTML = "";
 
         if (!Array.isArray(filmes) || filmes.length === 0) {
@@ -20,7 +17,7 @@ async function buscarFilmes() {
         }
 
         filmes.forEach((filme) => {
-            // Suporta tanto os filmes novos (pt-BR) quanto os antigos (en)
+            // Pega qualquer variação existente no objeto
             const titulo = filme.titulo || filme.title || "Sem título";
             const genero = filme.genero || filme.gender || "Sem gênero";
             const duracao = filme.duracao || filme.duration || "N/A";
@@ -29,34 +26,16 @@ async function buscarFilmes() {
             lista.innerHTML += `
                 <div class="filme">
                     <h2>${titulo}</h2>
-
-                    <p>
-                        <strong>Gênero:</strong>
-                        ${genero}
-                    </p>
-
-                    <p>
-                        <strong>Duração:</strong>
-                        ${duracao} minutos
-                    </p>
-
-                    <p>
-                        <strong>Classificação:</strong>
-                        ${classificacao}
-                    </p>
+                    <p><strong>Gênero:</strong> ${genero}</p>
+                    <p><strong>Duração:</strong> ${duracao} minutos</p>
+                    <p><strong>Classificação:</strong> ${classificacao}</p>
                 </div>
             `;
         });
 
     } catch (erro) {
         console.error("Erro ao buscar filmes:", erro);
-
-        lista.innerHTML = `
-            <p class="erro">
-                Não foi possível carregar os filmes.
-                Verifique se o servidor está funcionando.
-            </p>
-        `;
+        lista.innerHTML = `<p class="erro">Não foi possível carregar os filmes.</p>`;
     }
 }
 

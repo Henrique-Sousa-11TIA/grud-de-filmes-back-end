@@ -20,29 +20,23 @@ async function buscarFilmes() {
         }
 
         filmes.forEach((filme) => {
-            // Suporta tanto os filmes novos (pt-BR) quanto os antigos (en)
-            const titulo = filme.titulo || filme.title || "Sem título";
-            const genero = filme.genero || filme.gender || "Sem gênero";
-            const duracao = filme.duracao || filme.duration || "N/A";
-            const classificacao = filme.classificacao_etaria || filme.ageLimit || "N/A";
-
             lista.innerHTML += `
                 <div class="filme">
-                    <h2>${titulo}</h2>
+                    <h2>${filme.titulo}</h2>
 
                     <p>
                         <strong>Gênero:</strong>
-                        ${genero}
+                        ${filme.genero}
                     </p>
 
                     <p>
                         <strong>Duração:</strong>
-                        ${duracao} minutos
+                        ${filme.duracao} minutos
                     </p>
 
                     <p>
                         <strong>Classificação:</strong>
-                        ${classificacao}
+                        ${filme.classificacao_etaria}
                     </p>
                 </div>
             `;
