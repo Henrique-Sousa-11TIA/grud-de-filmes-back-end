@@ -1,88 +1,104 @@
-import express from "express"
-import mysql2 from "mysql2"
-import cors from "cors"
+import express from "express";
+import cors from "cors";
 
-const database = mysql2.createPool({
-    host: "benserverplex.ddns.net",
-    user: "alunos",
-    password: "senhaAlunos",
-    database: "alunos_filmes_03MA"
-})
+const app = express();
 
+app.use(cors());
+app.use(express.json());
 
-const app = express()
+const filmes = [
+    {
+        id: 1,
+        titulo: "Interestelar",
+        genero: "Ficção científica",
+        duracao: 169,
+        classificacao_etaria: "10 anos"
+    },
+    {
+        id: 2,
+        titulo: "O Poderoso Chefão",
+        genero: "Drama",
+        duracao: 175,
+        classificacao_etaria: "16 anos"
+    },
+    {
+        id: 3,
+        titulo: "Toy Story",
+        genero: "Animação",
+        duracao: 81,
+        classificacao_etaria: "Livre"
+    }
+];
 
-app.use(express.json())
-app.use(cors())
+// BUSCAR TODOS OS FILMES
+app.get("/all-movies", (req, res) => {
+    res.json(filmes);
+});
 
-app.get("/all-movies", (request, response) => {
-    const selectCommand = "SELECT * FROM filmes_ViniciusSilva"
+// ADICIONAR FILME
+app.post("/add-movie", (req, res) => {
+    const novoFilme = {
+        id: filmes.length + 1,
+        titulo: req.body.titulo,
+        genero: req.body.genero,
+        duracao: Number(req.body.duracao),
+        classificacao_etaria: req.body.classificacao_etaria
+    };
 
-    database.query(selectCommand, (error, data) => {
-        if (error) {
-            console.log(error)
-            return
-        }
+    filmes.push(novoFilme);
 
-        response.json(data)
-    })
-})
+    res.status(201).json({
+        mensagem: "Filme adicionado com sucesso!",
+        filme: novoFilme
+    });
+});
 
+// DELETAR FILME
+app.delete("/delete-movie/:id", (req, res) => {
+    const id = Number(req.params.id);
 
-app.post("/add-movie", (request, response) => {
-    const { titulo, genero, duracao, classificacao_etaria } = request.body
+    const indice = filmes.findIndex(filme => filme.id === id);
 
-    const insertCommand = 
-        "INSERT INTO filmes_ViniciusSilva(titulo, genero, duracao, classificacao_etaria) VALUES (?, ?, ?, ?)"
+    if (indice === -1) {
+        return res.status(404).json({
+            mensagem: "Filme não encontrado"
+        });
+    }
 
-    database.query(insertCommand, [titulo, genero, duracao, classificacao_etaria], (error) => {
-        if (error) {
-            console.log(error)
-        } else {
-            response.status(201).json({
-                message: "Filme adicionado com sucesso!"
-            })
-        }
-    })
-})
+    const filmeRemovido = filmes.splice(indice, 1);
 
-app.delete("/delete-movie/:id", (request, response) => {
+    res.json({
+        mensagem: "Filme removido com sucesso!",
+        filme: filmeRemovido[0]
+    });
+});
 
-    const { id } = request.params
+// EDITAR FILME
+app.put("/update-movie/:id", (req, res) => {
+    const id = Number(req.params.id);
 
-    const deleteCommand = "DELETE FROM filmes_ViniciusSilva WHERE id=?"
+    const filme = filmes.find(filme => filme.id === id);
 
-    database.query(deleteCommand, [id], (error) => {
-        if (error) {
-            console.log(error)
-        } else {
-            response.json({
-                message: "Filme apagado com sucesso!"
-            })
-        }
-    })
+    if (!filme) {
+        return res.status(404).json({
+            mensagem: "Filme não encontrado"
+        });
+    }
 
-})
+    filme.titulo = req.body.titulo;
+    filme.genero = req.body.genero;
+    filme.duracao = Number(req.body.duracao);
+    filme.classificacao_etaria = req.body.classificacao_etaria;
 
-app.put("/update-movie/:id", (request, response) => {
-    const { id } = request.params
-    const { titulo, genero, duracao, classificacao_etaria } = request.body
+    res.json({
+        mensagem: "Filme atualizado com sucesso!",
+        filme: filme
+    });
+});
 
-    const updateCommand = 
-        "UPDATE filmes_ViniciusSilva SET titulo = ?, genero = ?, duracao = ?, classificacao_etaria = ? WHERE id = ?"
+// SERVIDOR
+const PORT = process.env.PORT || 8080;
 
-    database.query(updateCommand, [titulo, genero, duracao, classificacao_etaria, id], (error) => {
-        if (error) {
-            console.log(error)
-        } else {
-            response.json({
-                message: "Informações do filme atualizadas com sucesso!"
-            })
-        }
-    })
-})
-
-app.listen(8080, () => {
-    console.log("Servidor rodando na porta 8080")
-})
-
+app.listen(PORT, () => {
+    console.log(`Servidor rodando na porta ${PORT}`);
+});
