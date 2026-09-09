@@ -29,7 +29,7 @@ async function cadastrarFilme() {
     };
 
     try {
-        const resposta = await fetch("https://grud-de-filmes-back-end-mv1u.vercel.app/add-movie", informacoesAEnviar);
+        const resposta = await fetch("https://grud-de-filmes-back-end-m6ll.vercel.app/add-movie", informacoesAEnviar);
 
         if (!resposta.ok) {
             throw new Error(`Erro no cadastro: ${resposta.status}`);
