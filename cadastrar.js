@@ -1,36 +1,47 @@
-const API_URL = "https://grud-de-filmes-back-end-mv1u.vercel.app";
+async function cadastrarFilme() {
+    const inputTitle = document.getElementById("title");
+    const inputGender = document.getElementById("gender");
+    const inputAgeLimit = document.getElementById("ageLimit");
+    const inputDuration = document.getElementById("duration");
 
-const form = document.getElementById("form-cadastro") || document.querySelector("form");
-
-if (form) {
-  form.addEventListener("submit", async function (event) {
-    event.preventDefault();
+    if (!inputTitle.value || !inputGender.value || !inputAgeLimit.value || !inputDuration.value) {
+        alert("Preencha todas as informações!");
+        return;
+    }
 
     const filme = {
-      titulo: document.getElementById("titulo").value,
-      genero: document.getElementById("genero").value,
-      classificacao_etaria: document.getElementById("classificacao").value,
-      duracao: Number(document.getElementById("duracao").value)
+        titulo: inputTitle.value,
+        title: inputTitle.value,
+        genero: inputGender.value,
+        gender: inputGender.value,
+        classificacao_etaria: inputAgeLimit.value,
+        ageLimit: inputAgeLimit.value,
+        duracao: Number(inputDuration.value),
+        duration: Number(inputDuration.value)
+    };
+
+    const informacoesAEnviar = {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(filme)
     };
 
     try {
-      const resposta = await fetch(`${API_URL}/add-movie`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify(filme)
-      });
+        const resposta = await fetch("https://grud-de-filmes-back-end-mv1u.vercel.app/add-movie", informacoesAEnviar);
 
-      if (resposta.ok) {
-        // Redireciona para a tela inicial assim que o cadastro for bem-sucedido
+        if (!resposta.ok) {
+            throw new Error(`Erro no cadastro: ${resposta.status}`);
+        }
+
+        const mensagemDecifrada = await resposta.json();
+        alert(mensagemDecifrada.mensagem || mensagemDecifrada.message || "Filme cadastrado!");
+
+        // Redireciona apontando para a raiz do Live Server para recarregar o index correto
         window.location.href = "index.html";
-      } else {
-        alert("Erro ao cadastrar o filme.");
-      }
     } catch (erro) {
-      console.error("Erro na requisição:", erro);
-      alert("Erro ao conectar com o servidor.");
+        console.error("Erro ao cadastrar:", erro);
+        alert("Erro ao conectar com o servidor local.");
     }
-  });
 }
