@@ -2,7 +2,7 @@ async function buscarFilmes() {
     const lista = document.querySelector("#listaFilmes");
 
     try {
-        const resposta = await fetch("http://localhost:8080/all-movies");
+        const resposta = await fetch("https://grud-de-filmes-back-end-mv1u.vercel.app/all-movies", { cache: "no-store" });
 
         if (!resposta.ok) {
             throw new Error(`Erro HTTP: ${resposta.status}`);

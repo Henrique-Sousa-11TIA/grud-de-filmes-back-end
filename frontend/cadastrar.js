@@ -29,7 +29,7 @@ async function cadastrarFilme() {
     };
 
     try {
-        const resposta = await fetch("http://localhost:8080/add-movie", informacoesAEnviar);
+        const resposta = await fetch("https://grud-de-filmes-back-end-mv1u.vercel.app/add-movie", informacoesAEnviar);
 
         if (!resposta.ok) {
             throw new Error(`Erro no cadastro: ${resposta.status}`);
@@ -39,7 +39,7 @@ async function cadastrarFilme() {
         alert(mensagemDecifrada.mensagem || mensagemDecifrada.message || "Filme cadastrado!");
 
         // Redireciona apontando para a raiz do Live Server para recarregar o index correto
-        window.location.href = "./index.html";
+        window.location.href = "index.html";
     } catch (erro) {
         console.error("Erro ao cadastrar:", erro);
         alert("Erro ao conectar com o servidor local.");
